@@ -1,4 +1,4 @@
-<div class="navbar navbar-expand-md navbar" style="background-color:  #0f0f1b;">
+<div class="navbar navbar-expand-md navbar" style="background-color:  #0505f2;">
     <div class="text-center d-lg-none w-100">
         <button type="button" class="navbar-toggler dropdown-toggle" data-toggle="collapse" data-target="#navbar-footer">
             <i class="icon-unfold mr-2"></i>

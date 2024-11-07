@@ -2,7 +2,7 @@
     .navbar {
         padding-top: -20px;
         margin-bottom: 0;
-        background: linear-gradient(135deg, #2e026d, #7e22ce);
+        background-color: #0505f2;
         color: #ffffff;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Adds a subtle shadow for depth */
     }

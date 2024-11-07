@@ -1,10 +1,10 @@
 <style>
-
 /* Sidebar styles */
 .sidebar {
-  background-color: #333333;
+  background-color: #222;
   border-right: 1px solid #222;
 }
+
 .sidebar .nav-link {
   color: #f5f5f5;
   padding: 12px 20px;
@@ -12,52 +12,65 @@
   font-weight: 500;
   transition: background-color 0.3s, color 0.3s;
 }
+
 .sidebar .nav-link:hover,
 .sidebar .nav-link.active {
   background-color: #444;
   color: #fff;
 }
+
 .sidebar .nav-link i {
   margin-right: 10px;
   font-size: 16px;
 }
+
 .sidebar .nav-item-submenu .nav-link {
   padding-left: 40px;
 }
+
 .sidebar .nav-item-submenu .nav-group-sub .nav-link {
   padding-left: 50px;
 }
+
 .sidebar .sidebar-user {
-  background-color: #2b2b2b;
+  background-color: #333;
   padding: 20px;
   border-bottom: 1px solid #222;
 }
+
 .sidebar .sidebar-user .media-title {
   color: #f5f5f5;
 }
+
 .sidebar .sidebar-user .font-size-xs {
   color: #ccc;
 }
+
 .sidebar .sidebar-user .rounded-circle {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
+
 .sidebar .sidebar-mobile-toggler {
   background-color: #2b2b2b;
   padding: 10px 20px;
   color: #f5f5f5;
   border-bottom: 1px solid #222;
 }
+
 .sidebar .sidebar-mobile-toggler i {
   font-size: 18px;
 }
+
 /* Hover and active states */
 .sidebar .nav-link:hover {
   background-color: #3b3b3b;
 }
+
 .sidebar .nav-link.active {
   background-color: #444;
   color: #fff;
 }
+
 /* Responsive styles */
 @media (max-width: 767px) {
   .sidebar {
@@ -69,9 +82,11 @@
     transition: left 0.3s;
     z-index: 1000;
   }
+
   .sidebar.sidebar-mobile-open {
     left: 0;
   }
+
   .sidebar-mobile-toggler {
     display: block;
     text-align: right;

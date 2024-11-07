@@ -3,7 +3,7 @@
     .navbar {
         padding-top: -20px;
         margin-bottom:-20px;
-        background-color: #0f0f1b;
+        background-color: #0505f2;
     }
  
     .navbar-brand {
