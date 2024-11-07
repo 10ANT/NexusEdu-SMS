@@ -19,8 +19,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::put('/change_password', 'MyAccountController@change_pass')->name('my_account.change_pass');
     });
 
+    /*************** Support Team *****************/
+    Route::group(['namespace' => 'SupportTeam',], function(){
 
-
+   
         /*************** Users *****************/
         Route::group(['prefix' => 'users'], function(){
             Route::get('reset_pass/{id}', 'UserController@reset_pass')->name('users.reset_pass');
@@ -52,7 +54,7 @@ Route::group(['middleware' => 'auth'], function () {
 
             });
 
-            /*************** Time Slots *****************/
+            /*************** Time Slo****/
             Route::group(['prefix' => 'time_slots', 'middleware' => 'teamSA'], function(){
                 Route::post('/', 'TimeTableController@store_time_slot')->name('ts.store');
                 Route::post('/use/{ttr}', 'TimeTableController@use_time_slot')->name('ts.use');
@@ -61,10 +63,11 @@ Route::group(['middleware' => 'auth'], function () {
                 Route::put('/{ts}', 'TimeTableController@update_time_slot')->name('ts.update');
             });
 
+        });
+
+
+
         
-
-
-
         Route::group(['prefix' => 'payments'], function(){
 
             Route::get('manage/{class_id?}', 'PaymentController@manage')->name('payments.manage');
@@ -77,11 +80,12 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('pay_now/{id}', 'PaymentController@pay_now')->name('payments.pay_now');
         });
 
+    
 
-
+ 
         Route::resource('users', 'UserController');
         Route::resource('exams', 'ExamController');
-
+     
         Route::resource('payments', 'PaymentController');
 
     });
@@ -95,10 +99,15 @@ Route::group(['middleware' => 'auth'], function () {
 
 });
 
-/*Suuper admin */
+/************************ SUPER ADMIN ****************************/
 Route::group(['namespace' => 'SuperAdmin','middleware' => 'super_admin', 'prefix' => 'super_admin'], function(){
 
     Route::get('/settings', 'SettingController@index')->name('settings');
     Route::put('/settings', 'SettingController@update')->name('settings.update');
+
+})
+Route::group(['namespace' => 'MyParent','middleware' => 'my_parent',], function(){
+
+    Route::get('/my_children', 'MyController@children')->name('my_children');
 
 });
