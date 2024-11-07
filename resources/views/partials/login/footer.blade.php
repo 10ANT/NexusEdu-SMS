@@ -1,4 +1,4 @@
-<div class="navbar navbar-expand-lg navbar-light">
+<div class="navbar navbar-expand-md navbar" style="background-color:  #0f0f1b;">
     <div class="text-center d-lg-none w-100">
         <button type="button" class="navbar-toggler dropdown-toggle" data-toggle="collapse" data-target="#navbar-footer">
             <i class="icon-unfold mr-2"></i>
@@ -8,7 +8,7 @@
 
     <div class="navbar-collapse collapse" id="navbar-footer">
 					<span class="navbar-text">
-						&copy; {{ date('Y') }}. <a href="#">{{ Qs::getSystemName() }}</a> by <a href="#" >CJ Inspired</a>
+						&copy; {{ date('Y') }}. <a href="#">{{ Qs::getSystemName() }}</a> by <a href="#" >Group 1</a>
 					</span>
 
         <ul class="navbar-nav ml-lg-auto">

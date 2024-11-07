@@ -9946,7 +9946,9 @@ img.fancytree-icon {
     position: relative;
     top: -0.09375rem;
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale; }
+    -moz-osx-font-smoothing: grayscale; 
+    color: #ffff00;
+  }
 
 .fc-icon-left-single-arrow:after {
   content: '\e9c0'; }

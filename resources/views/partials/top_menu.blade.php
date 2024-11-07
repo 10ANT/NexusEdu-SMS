@@ -1,4 +1,19 @@
-<div class="navbar navbar-expand-md navbar-dark">
+<style>
+    .navbar {
+        padding-top: -20px;
+        margin-bottom: 0;
+        background: linear-gradient(135deg, #2e026d, #7e22ce);
+        color: #ffffff;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Adds a subtle shadow for depth */
+    }
+
+
+    i{
+        color: white;
+    }
+</style>
+
+<div class="navbar navbar-expand-md navbar">
     <div class="mt-2 mr-5">
         <a href="{{ route('dashboard') }}" class="d-inline-block">
         <h4 class="text-bold text-white">{{ Qs::getSystemName() }}</h4>

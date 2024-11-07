@@ -29,9 +29,9 @@ class UsersTableSeeder extends Seeder
 
         $d = [
 
-            ['name' => 'CJ Inspired',
-                'email' => 'cj@cj.com',
-                'username' => 'cj',
+            ['name' => 'SuperAdmin',
+                'email' => 'nexusedu@gmail.com',
+                'username' => 'superadmin',
                 'password' => $password,
                 'user_type' => 'super_admin',
                 'code' => strtoupper(Str::random(10)),
@@ -47,7 +47,7 @@ class UsersTableSeeder extends Seeder
             'remember_token' => Str::random(10),
             ],
 
-            ['name' => 'Teacher Chike',
+            ['name' => 'Teacher Blake',
                 'email' => 'teacher@teacher.com',
                 'user_type' => 'teacher',
                 'username' => 'teacher',
@@ -56,7 +56,7 @@ class UsersTableSeeder extends Seeder
                 'remember_token' => Str::random(10),
             ],
 
-            ['name' => 'Parent Kaba',
+            ['name' => 'Parent Sasha',
                 'email' => 'parent@parent.com',
                 'user_type' => 'parent',
                 'username' => 'parent',
@@ -65,7 +65,7 @@ class UsersTableSeeder extends Seeder
                 'remember_token' => Str::random(10),
             ],
 
-            ['name' => 'Accountant Jeff',
+            ['name' => 'Accountant Jeffery',
                 'email' => 'accountant@accountant.com',
                 'user_type' => 'accountant',
                 'username' => 'accountant',

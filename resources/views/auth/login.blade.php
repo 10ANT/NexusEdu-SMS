@@ -1,5 +1,21 @@
 @extends('layouts.login_master')
 
+<style>
+    img{
+width: 70px;
+margin-bottom:20px;
+    };
+    .logincard {
+  margin-right: 2px;
+  transition: margin 0.2s ease-in-out, margin-top 0.2s ease-in-out;
+  background-color: gray;
+}
+
+.logincard:hover {
+  margin-top: -10px; /* Added 'px' unit */
+}
+
+</style>
 @section('content')
     <div class="page-content login-cover">
 
@@ -12,12 +28,12 @@
                 <!-- Login card -->
                 <form class="login-form " method="post" action="{{ route('login') }}">
                     @csrf
-                    <div class="card mb-0">
+                    <div class="card logincard mb-0">
                         <div class="card-body">
                             <div class="text-center mb-3">
-                                <i class="icon-people icon-2x text-warning-400 border-warning-400 border-3 rounded-round p-3 mb-3 mt-1"></i>
+                                <img src="/global_assets/images/user icon/user.png" alt="User Icon">
                                 <h5 class="mb-0">Login to your account</h5>
-                                <span class="d-block text-muted">Your credentials</span>
+                                <span class="d-block text-muted">Enter your login Info</span>
                             </div>
 
                                 @if ($errors->any())
@@ -49,7 +65,7 @@
                             </div>
 
                             <div class="form-group">
-                                <button type="submit" class="btn btn-primary btn-block">Sign in <i class="icon-circle-right2 ml-2"></i></button>
+                                <button type="submit" class="btn btn-block" style="background:rgb(0, 110, 255); color:white">Sign in <i class="icon-circle-right2 ml-2"></i></button>
                             </div>
 
                            {{-- <div class="form-group">
