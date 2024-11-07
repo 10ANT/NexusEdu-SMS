@@ -89,7 +89,7 @@
     overflow: hidden;
 }
 
-.card-stats:nth-child(1) {
+ .card-stats:nth-child(1) {
     background: linear-gradient(135deg, #00b09b, #3d5ec9);
 }
 
