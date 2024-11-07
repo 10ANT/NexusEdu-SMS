@@ -67,7 +67,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 
 
-        
+
         Route::group(['prefix' => 'payments'], function(){
 
             Route::get('manage/{class_id?}', 'PaymentController@manage')->name('payments.manage');
@@ -105,7 +105,8 @@ Route::group(['namespace' => 'SuperAdmin','middleware' => 'super_admin', 'prefix
     Route::get('/settings', 'SettingController@index')->name('settings');
     Route::put('/settings', 'SettingController@update')->name('settings.update');
 
-})
+});
+
 Route::group(['namespace' => 'MyParent','middleware' => 'my_parent',], function(){
 
     Route::get('/my_children', 'MyController@children')->name('my_children');
