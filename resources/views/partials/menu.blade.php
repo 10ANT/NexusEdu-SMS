@@ -178,7 +178,7 @@
                         <ul class="nav nav-group-sub" data-submenu-title="Manage Tools">
                             {{--Timetables--}}
                                 <li class="nav-item"><a href="{{ route('tt.index') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['tt.index']) ? 'active' : '' }}">AI Study Chatbot</a></li>
-                                <li class="nav-item"><a href="{{ route('tt.index') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['tt.index']) ? 'active' : '' }}">Pomodoro Time Management</a></li>
+                                <li class="nav-item"><a href="https://pomofocus.io/" class="nav-link {{ in_array(Route::currentRouteName(), ['tt.index']) ? 'active' : '' }}">Pomodoro Time Management</a></li>
 
                             </ul>
 
