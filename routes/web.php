@@ -170,3 +170,7 @@ Route::group(['namespace' => 'MyParent','middleware' => 'my_parent',], function(
     Route::get('/my_children', 'MyController@children')->name('my_children');
 
 });
+
+//Ai test paper marker
+Route::post('/analyze-papers', 'TestPaperController@analyzePapers')->name('analyze.papers');
+Route::get('/upload-papers', 'TestPaperController@show')->name('upload.papers');
