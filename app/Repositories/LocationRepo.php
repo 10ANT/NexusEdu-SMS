@@ -3,19 +3,19 @@
 namespace App\Repositories;
 
 use App\Models\Nationality;
-use App\Models\State;
-use App\Models\Lga;
+use App\Models\Parishes;
+//use App\Models;
 
 class LocationRepo
 {
-    public function getStates()
+    public function getParishes()
     {
-        return State::all();
+        return Parishes::all();
     }
 
-    public function getAllStates()
+    public function getAllParishes()
     {
-        return State::orderBy('name', 'asc')->get();
+        return Parishes::orderBy('name', 'asc')->get();
     }
 
     public function getAllNationals()
@@ -23,9 +23,6 @@ class LocationRepo
         return Nationality::orderBy('name', 'asc')->get();
     }
 
-    public function getLGAs($state_id)
-    {
-        return Lga::where('state_id', $state_id)->orderBy('name', 'asc')->get();
-    }
+
 
 }

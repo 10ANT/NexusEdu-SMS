@@ -2,7 +2,7 @@
 namespace Database\Seeders;
 
 
-use App\Models\Parish;
+use App\Models\Parishes;
 use Illuminate\Database\Seeder;
 
 class ParishesTableSeeder extends Seeder
@@ -10,7 +10,7 @@ class ParishesTableSeeder extends Seeder
     public function run()
     {
         // Truncate the table to clear any existing records (safer and more efficient than delete())
-        Parish::truncate();
+        Parishes::truncate();
 
         // List of Jamaican Parishes
         $parishes = [
@@ -35,7 +35,7 @@ class ParishesTableSeeder extends Seeder
 
         // Insert parishes into the parishes table
         foreach ($parishes as $parish) {
-            Parish::create([  // Use the Parish model to insert the records
+            Parishes::create([  // Use the Parish model to insert the records
                 'name' => $parish,
                 'created_at' => now(),
                 'updated_at' => now(),
