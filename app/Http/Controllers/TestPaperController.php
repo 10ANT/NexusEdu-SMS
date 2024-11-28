@@ -16,31 +16,31 @@ class TestPaperController extends Controller
     }
 
     public function analyzePapers(Request $request)
-    {
-        $request->validate([
-            'papers.*' => 'required|image|max:10240',
-            'total_questions' => 'required|integer|min:1'
-        ]);
+{
+    $request->validate([
+        'papers.*' => 'required|image|max:10240',
+        'total_marks' => 'required|integer|min:1'
+    ]);
 
-        $totalScore = 0;
-        $results = [];
+    $totalScore = 0;
+    $results = [];
 
-        foreach ($request->file('papers') as $paper) {
-            $imageData = file_get_contents($paper->path());
-            $predictions = $this->getPredictions($imageData);
-            
-            $paperScore = $this->calculateScore($predictions);
-            $totalScore += $paperScore;
-            $results[] = [
-                'filename' => $paper->getClientOriginalName(),
-                'score' => $paperScore
-            ];
-        }
-
-        $percentage = ($totalScore / ($request->total_questions * 4)) * 100;
-
-        return view('papers.results', compact('results', 'percentage', 'totalScore'));
+    foreach ($request->file('papers') as $paper) {
+        $imageData = file_get_contents($paper->path());
+        $predictions = $this->getPredictions($imageData);
+        
+        $paperScore = $this->calculateScore($predictions);
+        $totalScore += $paperScore;
+        $results[] = [
+            'filename' => $paper->getClientOriginalName(),
+            'score' => $paperScore
+        ];
     }
+
+    $percentage = ($totalScore / $request->total_marks) * 100;
+
+    return view('papers.results', compact('results', 'percentage', 'totalScore'));
+}
 
     private function getPredictions($imageData)
     {

@@ -172,12 +172,12 @@
                         </ul>
                     </li>
                     <li class="nav-item nav-item-submenu {{ in_array(Route::currentRouteName(), ['tt.index', 'ttr.edit', 'ttr.show', 'ttr.manage']) ? 'nav-item-expanded nav-item-open' : '' }} "">
-                        <a href="#" class="nav-link"><i class="icon-graduation2"></i> <span> Learning Tools</span></a>
+                        <a href="#" class="nav-link"><i class="icon-book"></i> <span> Learning Tools</span></a>
 
 
                         <ul class="nav nav-group-sub" data-submenu-title="Manage Tools">
                             {{--Timetables--}}
-                                <li class="nav-item"><a href="{{ route('tt.index') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['tt.index']) ? 'active' : '' }}">AI Study Chatbot</a></li>
+                                <li class="nav-item"><a href="" class="nav-link {{ in_array(Route::currentRouteName(), ['tt.index']) ? 'active' : '' }}">AI Study Chatbot</a></li>
                                 <li class="nav-item"><a href="https://pomofocus.io/" class="nav-link {{ in_array(Route::currentRouteName(), ['tt.index']) ? 'active' : '' }}">Pomodoro Time Management</a></li>
 
                             </ul>
