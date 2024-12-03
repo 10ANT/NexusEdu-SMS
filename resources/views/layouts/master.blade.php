@@ -44,5 +44,13 @@
 
 @include('partials.inc_bottom')
 @yield('scripts')
+
+
+
+
+
+
+
+
 </body>
 </html>
