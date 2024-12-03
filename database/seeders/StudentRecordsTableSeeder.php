@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Section;
 use App\Models\StudentRecord;
-use App\User;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 

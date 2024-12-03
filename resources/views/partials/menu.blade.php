@@ -212,6 +212,15 @@
                         </ul>
                     </li>
                 @endif
+                {{--Chat--}}
+                      @if(Qs::userIsAdministrative())
+                      <li class="nav-link">
+                          <a href="http://127.0.0.1:8000/chatify" class="nav-link">
+                              <i class="icon-bubbles4"></i>
+                              <span>Chat</span>
+                          </a>
+                      </li>
+                      @endif
 
                 {{--Manage Students--}}
                 @if(Qs::userIsTeamSAT())

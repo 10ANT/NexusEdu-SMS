@@ -5,7 +5,7 @@ namespace App\Repositories;
 use App\Models\BloodGroup;
 use App\Models\StaffRecord;
 use App\Models\UserType;
-use App\User;
+use App\Models\User;
 
 
 class UserRepo {
