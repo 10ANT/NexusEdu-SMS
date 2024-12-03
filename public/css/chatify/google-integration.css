@@ -1,0 +1,26 @@
+/* public/css/google-integration.css */
+.card {
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.nav-tabs .nav-link {
+    color: #6c757d;
+}
+
+.nav-tabs .nav-link.active {
+    color: #4285f4;
+    font-weight: 500;
+}
+
+.modal-content {
+    border-radius: 10px;
+}
+
+.btn-close:focus {
+    box-shadow: none;
+}

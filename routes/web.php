@@ -1,6 +1,10 @@
 <?php
+use App\Http\Controllers\GoogleAuthController;
+use App\Http\Controllers\ClassDriveFolderController;
+use App\Http\Controllers\GoogleClassroomController;
 
 Auth::routes();
+
 
 //Route::get('/test', 'TestController@index')->name('test');
 Route::get('/privacy-policy', 'HomeController@privacy_policy')->name('privacy_policy');
@@ -175,3 +179,58 @@ Route::group(['namespace' => 'MyParent','middleware' => 'my_parent',], function(
 //Ai test paper marker
 Route::post('/analyze-papers', 'TestPaperController@analyzePapers')->name('analyze.papers');
 Route::get('/upload-papers', 'TestPaperController@show')->name('upload.papers');
+
+
+
+// Google Authentication Routes
+Route::group(['prefix' => 'google'], function () {
+    Route::get('/auth', [GoogleAuthController::class, 'redirect'])->name('google.auth');
+    Route::get('/callback', [GoogleAuthController::class, 'callback'])->name('google.callback');
+    Route::get('/integration', [GoogleAuthController::class, 'dashboard'])
+        ->name('google.dashboard')
+        ->middleware(['auth', 'check.google.auth']);
+});
+// Google Integration Routes (Protected)
+Route::middleware(['auth', 'check.google.auth'])->group(function () {
+    // Main Integration Dashboard
+    Route::get('/google-integration', [GoogleAuthController::class, 'dashboard'])
+        ->name('google.dashboard');
+
+    // Google Classroom Routes
+    Route::prefix('classroom')->group(function () {
+        Route::get('/', [GoogleClassroomController::class, 'index'])
+            ->name('classroom.index');
+        Route::post('/create', [GoogleClassroomController::class, 'create'])
+            ->name('classroom.create');
+        Route::get('/{course}', [GoogleClassroomController::class, 'show'])
+            ->name('classroom.show');
+        Route::delete('/{course}', [GoogleClassroomController::class, 'destroy'])
+            ->name('classroom.destroy');
+    });
+
+    // Google Drive Folder Routes
+    Route::prefix('drive-folders')->group(function () {
+        Route::get('/', [ClassDriveFolderController::class, 'index'])
+            ->name('drive-folders.index');
+        Route::post('/create', [ClassDriveFolderController::class, 'create'])
+            ->name('drive-folders.create');
+        Route::get('/{folder}', [ClassDriveFolderController::class, 'show'])
+            ->name('drive-folders.show');
+        Route::delete('/{folder}', [ClassDriveFolderController::class, 'destroy'])
+            ->name('drive-folders.destroy');
+    });
+
+    // AJAX Routes for Integration
+    Route::prefix('api')->group(function () {
+        Route::post('/classroom/sync', [GoogleClassroomController::class, 'sync'])
+            ->name('classroom.sync');
+        Route::post('/drive/sync', [ClassDriveFolderController::class, 'sync'])
+            ->name('drive.sync');
+    });
+});
+
+// API Routes for Integration (if needed)
+Route::prefix('api')->middleware(['auth:sanctum'])->group(function () {
+    Route::get('/classrooms', [GoogleClassroomController::class, 'apiIndex']);
+    Route::get('/drive-folders', [ClassDriveFolderController::class, 'apiIndex']);
+});
