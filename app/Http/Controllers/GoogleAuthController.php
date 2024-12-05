@@ -8,6 +8,7 @@ use App\Models\GoogleCredential;
 use App\Models\GoogleClassroom;  // Ensure this import is correct
 use App\Models\ClassDriveFolder;  // Ensure this import is correct
 use Illuminate\Support\Facades\Auth;
+use Google_Service_Classroom;
 
 class GoogleAuthController extends Controller
 {
@@ -24,13 +25,36 @@ class GoogleAuthController extends Controller
 
     public function redirect()
     {
-        return redirect($this->client->createAuthUrl());
+        $client = new Google_Client();
+        $client->setClientId(env('GOOGLE_CLIENT_ID'));
+        $client->setClientSecret(env('GOOGLE_CLIENT_SECRET'));
+        $client->setRedirectUri(route('google.callback')); // Update this!
+        $client->addScope(Google_Service_Classroom::CLASSROOM_COURSES);
+        $client->setAccessType('offline');
+        $client->setPrompt('consent');
+    
+        return redirect($client->createAuthUrl());
     }
+    
+ public function callback(Request $request)
+{
+    try {
+        $client = new Google_Client();
+        $client->setClientId(env('GOOGLE_CLIENT_ID'));
+        $client->setClientSecret(env('GOOGLE_CLIENT_SECRET'));
+        $client->setRedirectUri(route('google.callback'));
+        
+        // Important: Add these scopes
+        $client->addScope(Google_Service_Classroom::CLASSROOM_COURSES);
+        $client->setAccessType('offline');
+        $client->setPrompt('consent');
 
-    public function callback(Request $request)
-    {
-        $token = $this->client->fetchAccessTokenWithAuthCode($request->get('code'));
+        $token = $client->fetchAccessTokenWithAuthCode($request->code);
 
+        // Debug line - add this temporarily
+        \Log::info('Google Token:', $token);
+
+        // Save the credentials
         GoogleCredential::updateOrCreate(
             ['user_id' => Auth::id()],
             [
@@ -40,8 +64,20 @@ class GoogleAuthController extends Controller
             ]
         );
 
-        return redirect()->route('google.dashboard');
+        return redirect()->route('google.dashboard')->with('success', 'Google account connected successfully!');
+
+    } catch (\Exception $e) {
+        // Debug line - add this temporarily
+        \Log::error('Google Auth Error: ' . $e->getMessage());
+        
+        return redirect()->back()->with('error', 'Failed to connect Google account: ' . $e->getMessage());
     }
+}
+
+
+
+
+
 
     public function dashboard()
     {
@@ -50,4 +86,10 @@ class GoogleAuthController extends Controller
 
         return view('google.integration.index', compact('classrooms', 'driveFolders'));
     }
+
+
+    
 }
+
+
+

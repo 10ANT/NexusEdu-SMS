@@ -1,3 +1,8 @@
+<button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#createDriveFolderModal">
+    Create Drive Folder
+</button>
+
+
 <div class="modal fade" id="createDriveFolderModal">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -24,3 +29,56 @@
         </div>
     </div>
 </div>
+
+<script>
+    $('#createDriveFolderForm').on('submit', function(e) {
+    e.preventDefault();
+    
+    Swal.fire({
+        title: 'Creating folder...',
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+
+    var formData = new FormData(this);
+
+    $.ajax({
+        url: '/drive-folder/create',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function(response) {
+            if (response.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: response.message
+                }).then(() => {
+                    $('#createDriveFolderForm')[0].reset();
+                    $('#createDriveFolderModal').modal('hide');
+                    location.reload();
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: response.message
+                });
+            }
+        },
+        error: function(xhr) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: xhr.responseJSON ? xhr.responseJSON.message : 'Something went wrong'
+            });
+        }
+    });
+});
+</script>

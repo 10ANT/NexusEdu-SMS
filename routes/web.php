@@ -2,6 +2,9 @@
 use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\ClassDriveFolderController;
 use App\Http\Controllers\GoogleClassroomController;
+use App\Http\Controllers\GoogleController;
+
+
 
 Auth::routes();
 
@@ -202,14 +205,15 @@ Route::middleware(['auth', 'check.google.auth'])->group(function () {
             ->name('classroom.index');
         Route::post('/create', [GoogleClassroomController::class, 'create'])
             ->name('classroom.create');
-        Route::get('/{course}', [GoogleClassroomController::class, 'show'])
+            Route::get('/classroom/{id}', [GoogleClassroomController::class, 'show'])
             ->name('classroom.show');
-        Route::delete('/{course}', [GoogleClassroomController::class, 'destroy'])
-            ->name('classroom.destroy');
+    
+            Route::get('/classroom/delete/{courseId}', [GoogleClassroomController::class, 'destroy'])
+            ->name('classroom.delete');
     });
 
     // Google Drive Folder Routes
-    Route::prefix('drive-folders')->group(function () {
+    Route::prefix('drive-folder')->group(function () {
         Route::get('/', [ClassDriveFolderController::class, 'index'])
             ->name('drive-folders.index');
         Route::post('/create', [ClassDriveFolderController::class, 'create'])
@@ -218,6 +222,7 @@ Route::middleware(['auth', 'check.google.auth'])->group(function () {
             ->name('drive-folders.show');
         Route::delete('/{folder}', [ClassDriveFolderController::class, 'destroy'])
             ->name('drive-folders.destroy');
+            
     });
 
     // AJAX Routes for Integration
@@ -234,3 +239,8 @@ Route::prefix('api')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/classrooms', [GoogleClassroomController::class, 'apiIndex']);
     Route::get('/drive-folders', [ClassDriveFolderController::class, 'apiIndex']);
 });
+
+
+
+Route::get('/google/redirect', [ClassDriveFolderController::class, 'redirect'])->name('google.redirect');
+

@@ -5,10 +5,7 @@
     <div class="card-header d-flex justify-content-between align-items-center">
         <h4>Google Integration</h4>
         <div class="btn-group">
-            <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                Create New
-            </button>
-            <div class="dropdown-menu">
+                      <div class="dropdown-menu">
                 <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#createClassroomModal">
                     <i class="fas fa-graduation-cap me-2"></i>Create Classroom
                 </a>
@@ -19,6 +16,22 @@
         </div>
     </div>
 
+    @php
+$isGoogleConnected = Auth::user()->googleCredential()->exists();
+@endphp
+
+@if($isGoogleConnected)
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createClassroomModal">
+        Your Connected
+    </button><br>
+    <a href="{{ route('google.auth') }}" class="btn btn-primary">
+        Connect with Google or Re-Authenticate
+    </a>
+@else
+<a href="{{ route('google.auth') }}" class="btn btn-primary">
+    Connect with Google or Re-Authenticate
+</a>
+@endif
     <div class="card-body">
         <!-- Tabs -->
         <ul class="nav nav-tabs" role="tablist">
@@ -49,24 +62,24 @@
                                 </div>
                                 <p class="mb-1"><strong>Section:</strong> {{ $classroom->section }}</p>
                                 <p class="mb-1"><strong>Room:</strong> {{ $classroom->room }}</p>
-                                <div class="mt-3">
-                                    <a href="{{ route('classroom.show', $classroom->id) }}" class="btn btn-sm btn-primary">
-                                        <i class="fas fa-eye me-1"></i>Details
-                                    </a>
-                                    <a href="{{ $classroom->course_link }}" target="_blank" class="btn btn-sm btn-secondary">
-                                        <i class="fas fa-external-link-alt me-1"></i>Open
-                                    </a>
+                                <div class="mt-3 d-flex justify-content-between">
+                                    <div>
+                                        <a href="{{ route('classroom.show', $classroom->id) }}" class="btn btn-sm btn-primary">
+                                            <i class="fas fa-eye me-1"></i>Details
+                                        </a>
+                                        <a href="{{ $classroom->course_link }}" target="_blank" class="btn btn-sm btn-secondary">
+                                            <i class="fas fa-external-link-alt me-1"></i>Open
+                                        </a>
+                                    </div>
+                                    <button class="btn btn-sm btn-danger delete-classroom" data-course-id="{{ $classroom->course_id }}">
+                                        <i class="fas fa-trash me-1"></i>Delete
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
                     @empty
-                    <div class="col-12">
-                        <div class="text-center text-muted">
-                            <i class="fas fa-graduation-cap fa-3x mb-3"></i>
-                            <p>No classrooms created yet</p>
-                        </div>
-                    </div>
+                    <!-- ... existing empty state ... -->
                     @endforelse
                 </div>
             </div>
@@ -127,6 +140,73 @@ $(document).ready(function() {
     $('#createDriveFolderForm').on('submit', function(e) {
         e.preventDefault();
         // Add your AJAX submission logic here
+    });
+
+
+
+
+
+
+
+
+
+
+
+    
+});
+</script>
+
+<script>
+  $(document).ready(function() {
+    $('.delete-classroom').on('click', function() {
+        const courseId = $(this).data('course-id');
+        
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You want to delete this classroom?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: `/classroom/delete/${courseId}`,
+                    type: 'GET',
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Deleted!',
+                                text: 'Classroom has been deleted.'
+                            }).then(() => {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: response.message
+                            });
+                            
+                            // Log debug information to console
+                            console.error('Debug Info:', response.debug);
+                        }
+                    },
+                    error: function(xhr) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: xhr.responseJSON ? xhr.responseJSON.message : 'Something went wrong'
+                        });
+                        
+                        // Log error to console
+                        console.error('Error Response:', xhr.responseJSON);
+                    }
+                });
+            }
+        });
     });
 });
 </script>

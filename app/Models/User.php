@@ -64,4 +64,6 @@ class User extends Authenticatable
     {
         return $this->hasMany(StaffRecord::class);
     }
+    public function googleCredential() { return $this->hasOne(GoogleCredential::class);}
+    
 }
