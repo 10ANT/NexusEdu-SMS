@@ -6,7 +6,7 @@ use App\Models\BloodGroup;
 use App\Models\Lga;
 use App\Models\Nationality;
 use App\Models\StaffRecord;
-use App\Models\State;
+use App\Models\Parishes;
 use App\Models\StudentRecord;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
@@ -25,7 +25,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name', 'username', 'email', 'phone', 'phone2', 'dob', 'gender', 'photo', 'address', 'bg_id', 'password', 'nal_id', 'state_id', 'lga_id', 'code', 'user_type', 'email_verified_at'
     ];
-
+    
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -40,14 +40,9 @@ class User extends Authenticatable
         return $this->hasOne(StudentRecord::class);
     }
 
-    public function lga()
+    public function parish()
     {
-        return $this->belongsTo(Lga::class);
-    }
-
-    public function state()
-    {
-        return $this->belongsTo(State::class);
+        return $this->belongsTo(Parishes::class);
     }
 
     public function nationality()

@@ -21,10 +21,10 @@ $isGoogleConnected = Auth::user()->googleCredential()->exists();
 @endphp
 
 @if($isGoogleConnected)
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createClassroomModal">
+    <button type="button" class="btn btn-primary" style="background: rgb(139, 233, 45); width:200px; margin:auto" data-bs-toggle="modal" data-bs-target="#createClassroomModal">
         Your Connected
     </button><br>
-    <a href="{{ route('google.auth') }}" class="btn btn-primary">
+    <a href="{{ route('google.auth') }}" class="btn btn-primary" style="width:250px; margin:auto">
         Connect with Google or Re-Authenticate
     </a>
 @else

@@ -25,7 +25,7 @@ class UsersTableSeeder extends Seeder
 
     protected function createNewUsers()
     {
-        $password = Hash::make('cj'); // Default user password
+        $password = Hash::make('12345abc'); // Default user password
 
         $d = [
 
