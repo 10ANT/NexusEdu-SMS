@@ -3,7 +3,7 @@ use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\ClassDriveFolderController;
 use App\Http\Controllers\GoogleClassroomController;
 use App\Http\Controllers\GoogleController;
-
+use App\Http\Controllers\EventController;
 
 
 Auth::routes();
@@ -16,7 +16,11 @@ Route::get('/terms-of-use', 'HomeController@terms_of_use')->name('terms_of_use')
 
 Route::group(['middleware' => 'auth'], function () {
 
-    Route::get('/', 'HomeController@dashboard')->name('home');
+    Route::get('/', [EventController::class, 'index'])->name('calendar');
+
+     //below is the old index route
+    //Route::get('/', 'HomeController@dashboard')->name('home');
+
     Route::get('/home', 'HomeController@dashboard')->name('home');
     Route::get('/dashboard', 'HomeController@dashboard')->name('dashboard');
 
@@ -244,3 +248,11 @@ Route::prefix('api')->middleware(['auth:sanctum'])->group(function () {
 
 Route::get('/google/redirect', [ClassDriveFolderController::class, 'redirect'])->name('google.redirect');
 
+
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/calendar', [EventController::class, 'index'])->name('calendar');
+    Route::post('/events', [EventController::class, 'store'])->name('events.store');
+    Route::put('/events/{id}', [EventController::class, 'update'])->name('events.update');
+    Route::delete('/events/{id}', [EventController::class, 'destroy'])->name('events.destroy');
+});

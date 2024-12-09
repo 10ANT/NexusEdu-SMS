@@ -356,7 +356,7 @@
 
 
 
-<button id="nexusChatBtn" class="nexus-chat-btn">
+<button id="nexusChatBtn1" class="nexus-chat-btn">
   <i class="chat-icon">💬</i>
 </button>
 
@@ -541,6 +541,8 @@
 <script>
   $(document).ready(function() {
     const nexusChatBtn = $('#nexusChatBtn');
+    const nexusChatBtn1= $('#nexusChatBtn1');
+
     const nexusChatInterface = $('#nexusChatInterface');
     const closeNexusChat = $('#closeNexusChat');
     const userInput = $('#userInput');
@@ -553,11 +555,14 @@
     nexusChatBtn.click(function() {
         nexusChatInterface.addClass('open');
     });
-
+    nexusChatBtn1.click(function() {
+        nexusChatInterface.addClass('open');
+    });
     closeNexusChat.click(function() {
         nexusChatInterface.removeClass('open');
     });
 
+    
     sendMessage.click(sendUserMessage);
     userInput.keypress(function(e) {
         if (e.which == 13) {

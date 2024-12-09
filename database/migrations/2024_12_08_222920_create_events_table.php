@@ -11,13 +11,21 @@ class CreateEventsTable extends Migration
      *
      * @return void
      */
-    public function up()
-    {
-        Schema::create('events', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
-    }
+   // database/migrations/xxxx_xx_xx_create_events_table.php
+   public function up()
+   {
+       Schema::create('events', function (Blueprint $table) {
+           $table->id();
+           $table->string('title');
+           $table->dateTime('start');
+           $table->dateTime('end');
+           $table->text('description')->nullable();
+           $table->string('color')->default('#3788d8');
+           $table->unsignedInteger('user_id');
+           $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+           $table->timestamps();
+       });
+   }
 
     /**
      * Reverse the migrations.

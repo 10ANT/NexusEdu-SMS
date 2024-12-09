@@ -28,7 +28,7 @@ $isGoogleConnected = Auth::user()->googleCredential()->exists();
         Connect with Google or Re-Authenticate
     </a>
 @else
-<a href="{{ route('google.auth') }}" class="btn btn-primary">
+<a href="{{ route('google.auth') }}" class="btn btn-primary" style="width:250px; margin:auto">
     Connect with Google or Re-Authenticate
 </a>
 @endif

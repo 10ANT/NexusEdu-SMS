@@ -75,6 +75,7 @@
 
         <div class="card-body">
             <div class="fullcalendar-basic"></div>
+            @include('calendar')
         </div>
     </div>
 @endsection
