@@ -10,7 +10,7 @@
     <!-- Fonts -->
     <link rel="stylesheet" href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap">
     
-   
+    <link href="/assets/css/custom.css" rel="stylesheet">
     <!-- Bootstrap CSS -->
     
    <!-- FullCalendar CSS -->
@@ -59,10 +59,18 @@
             </div>
         </div>
     </div>
+    <!-- In your layout file (master.blade.php) -->
+<!-- First jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Then jQuery Validate -->
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.min.js"></script>
+
+<!-- Then jQuery Steps -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-steps/1.1.0/jquery.steps.min.js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@3.10.5/fullcalendar.min.js"></script>
+ 
     
     <!-- Bootstrap JS (single include) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -70,6 +78,12 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Axios -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- In your master layout -->
+
+<script src="/assets/js/jquery.min.js"></script>
+<script src="/assets/js/jquery.steps.min.js"></script>
+<script src="/assets/js/jquery.validate.min.js"></script>
+<script src="/assets/js/sweetalert2.all.min.js"></script>
 
     @include('partials.inc_bottom')
     @yield('scripts')

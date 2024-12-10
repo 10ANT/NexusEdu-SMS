@@ -23,6 +23,7 @@ class CreateEventsTable extends Migration
            $table->string('color')->default('#3788d8');
            $table->unsignedInteger('user_id');
            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+           
            $table->timestamps();
        });
    }

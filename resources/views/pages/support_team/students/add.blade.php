@@ -1,32 +1,34 @@
 @extends('layouts.master')
 @section('page_title', 'Admit Student')
+
 @section('content')
-        <div class="card">
-            <div class="card-header bg-white header-elements-inline">
-                <h6 class="card-title">Please fill The form Below To Admit A New Student</h6>
+<div class="card">
+    <div class="card-header bg-white header-elements-inline">
+        <h6 class="card-title">Please fill The form Below To Admit A New Student</h6>
+        {!! Qs::getPanelOptions() !!}
+    </div>
 
-                {!! Qs::getPanelOptions() !!}
-            </div>
-
-            <form id="ajax-reg" method="post" enctype="multipart/form-data" class="wizard-form steps-validation" action="{{ route('students.store') }}" data-fouc>
-               @csrf
-                <h6>Personal data</h6>
-                <fieldset>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Full Name: <span class="text-danger">*</span></label>
-                                <input value="{{ old('name') }}" required type="text" name="name" placeholder="Full Name" class="form-control">
-                                </div>
-                            </div>
-
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Address: <span class="text-danger">*</span></label>
-                                <input value="{{ old('address') }}" class="form-control" placeholder="Address" name="address" type="text" required>
-                            </div>
-                        </div>
+    <form id="studentForm" method="post" enctype="multipart/form-data" action="{{ route('students.store') }}">
+        @csrf
+        
+        <!-- Personal Info Section -->
+        <div class="form-section">
+            <h6>Personal data</h6>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Full Name: <span class="text-danger">*</span></label>
+                        <input value="{{ old('name') }}" required type="text" name="name" placeholder="Full Name" class="form-control">
                     </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Address: <span class="text-danger">*</span></label>
+                        <input value="{{ old('address') }}" class="form-control" placeholder="Address" name="address" type="text" required>
+                    </div>
+                </div>
+            </div>
 
                     <div class="row">
                         <div class="col-md-3">
@@ -86,7 +88,7 @@
 
                         <div class="col-md-3">
                             <label for="parish_id">Parishes: <span class="text-danger">*</span></label>
-                            <select onchange="getLGA(this.value)" required data-placeholder="Choose.." class="select-search form-control" name="parish_id" id="parish_id">
+                            <select onchange="" required data-placeholder="Choose.." class="select-search form-control" name="parish_id" id="parish_id">
                                 <option value=""></option>
                                 @foreach($parishes as $parish)
                                     <option {{ (old('parish_id') == $parish->id ? 'selected' : '') }} value="{{ $parish->id }}">{{ $parish->name }}</option>
@@ -117,13 +119,13 @@
                         </div>
                     </div>
 
-                </fieldset>
+             
 
-                <h6>Student Data</h6>
-                <fieldset>
-                    <div class="row">
+                <h6 style="padding-left:20px">Student Data</h6>
+            
+                    <div class="row" style="padding-left:20px">
                         <div class="col-md-3">
-                            <div class="form-group">
+                            <div class="form-group" >
                                 <label for="my_class_id">Class: <span class="text-danger">*</span></label>
                                 <select onchange="getClassSections(this.value)" data-placeholder="Choose..." required name="my_class_id" id="my_class_id" class="select-search form-control">
                                     <option value=""></option>
@@ -201,8 +203,116 @@
                             </div>
                         </div>
                     </div>
-                </fieldset>
+                    <div class="form-navigation">
+                        
+                        <!--     <button type="button" class="previous btn btn-info float-left">Previous</button> --> 
+                    
+                        <button type="submit" class="btn btn-success">Submit</button>
+                  <!-- <button type="button" class="next btn btn-info float-right">Next</button>  --> 
 
+                     
+                    </div>
             </form>
         </div>
+    @endsection
+
+    @section('page_styles')
+    <style>
+    .form-section {
+        display: none;
+    }
+    .form-section.current {
+        display: block;
+    }
+    .form-navigation {
+        padding: 20px;
+    }
+    .form-navigation .previous {
+        display: none;
+    }
+    .form-navigation .submit {
+        display: none;
+    }
+    .parsley-errors-list {
+        color: red;
+    }
+    </style>
+    @endsection
+    
+
+    @section('page_scripts')
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/parsley.js/2.9.2/parsley.min.js"></script>
+    
+    <script>
+    $(function () {
+        var $sections = $('.form-section');
+    
+        function navigateTo(index) {
+            $sections.removeClass('current').eq(index).addClass('current');
+            $('.form-navigation .previous').toggle(index > 0);
+            var atTheEnd = index >= $sections.length - 1;
+            $('.form-navigation .next').toggle(!atTheEnd);
+            $('.form-navigation .submit').toggle(atTheEnd);
+        }
+    
+        function curIndex() {
+            return $sections.index($sections.filter('.current'));
+        }
+    
+        // Previous button click
+        $('.form-navigation .previous').click(function() {
+            navigateTo(curIndex() - 1);
+        });
+    
+        // Next button click
+        $('.form-navigation .next').click(function() {
+            if ($('#studentForm').parsley().validate('block-' + curIndex())) {
+                navigateTo(curIndex() + 1);
+            }
+        });
+    
+        // Submit form
+        $('#studentForm').submit(function(e) {
+            e.preventDefault();
+            if ($('#studentForm').parsley().isValid()) {
+                var formData = new FormData(this);
+                $.ajax({
+                    url: $(this).attr('action'),
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        alert('Student added successfully!');
+                        window.location.href = '/students';
+                    },
+                    error: function(xhr) {
+                        alert('Error adding student. Please try again.');
+                    }
+                });
+            }
+        });
+    
+        // Initialize form
+        $sections.each(function(index, section) {
+            $(section).find(':input').attr('data-parsley-group', 'block-' + index);
+        });
+        navigateTo(0);
+    });
+    
+    // Dynamic section loading
+    $('#my_class_id').on('change', function() {
+        var class_id = $(this).val();
+        if(class_id) {
+            $.ajax({
+                url: '/get-sections/' + class_id,
+                type: 'GET',
+                success: function(data) {
+                    $('#section_id').html(data);
+                }
+            });
+        }
+    });
+    </script>
     @endsection

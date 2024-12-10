@@ -137,4 +137,36 @@ class GoogleAuthController extends Controller
             return response()->json(['success' => false, 'message' => 'Failed to create Drive folder: ' . $e->getMessage()], 500);
         }
     }
+
+
+    public function getAccessToken()
+{
+    try {
+        $credentials = GoogleCredential::where('user_id', Auth::id())->first();
+
+        if (!$credentials) {
+            return response()->json(['success' => false, 'message' => 'Google authentication required'], 401);
+        }
+
+        $client = new Google_Client();
+        $client->setClientId(env('GOOGLE_CLIENT_ID'));
+        $client->setClientSecret(env('GOOGLE_CLIENT_SECRET'));
+        $client->setRedirectUri(route('google.callback'));
+        $client->setAccessToken($credentials->access_token);
+
+        if ($client->isAccessTokenExpired()) {
+            $client->fetchAccessTokenWithRefreshToken($credentials->refresh_token);
+            $credentials->update([
+                'access_token' => $client->getAccessToken()['access_token'],
+                'expires_at' => now()->addSeconds($client->getAccessToken()['expires_in']),
+            ]);
+        }
+
+        return response()->json(['success' => true, 'access_token' => $client->getAccessToken()['access_token']]);
+
+    } catch (\Exception $e) {
+        return response()->json(['success' => false, 'message' => 'Error fetching access token: ' . $e->getMessage()], 500);
+    }
+}
+
 }

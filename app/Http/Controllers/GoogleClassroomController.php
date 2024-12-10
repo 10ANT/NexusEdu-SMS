@@ -112,107 +112,63 @@ class GoogleClassroomController extends Controller
         }
     }
     public function destroy($courseId)
-{
-    try {
-        // Find the classroom
-        $classroom = GoogleClassroom::where('course_id', $courseId)
-            ->where('created_by', Auth::id())
-            ->firstOrFail();
-
-        // Check user's Google credentials
-        $credentials = GoogleCredential::where('user_id', Auth::id())->first();
-        
-        if (!$credentials) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Google authentication required',
-                'debug' => 'No credentials found for user'
-            ], 401);
-        }
-
-        // Initialize Google Client
-        $client = new Google_Client();
-        $client->setClientId(env('GOOGLE_CLIENT_ID'));
-        $client->setClientSecret(env('GOOGLE_CLIENT_SECRET'));
-
-        // Set access token
+    {
         try {
+            // Find the classroom
+            $classroom = GoogleClassroom::where('course_id', $courseId)
+                ->where('created_by', Auth::id())
+                ->firstOrFail();
+    
+            // Initialize Google Client
+            $client = new Google_Client();
+            $client->setClientId(env('GOOGLE_CLIENT_ID'));
+            $client->setClientSecret(env('GOOGLE_CLIENT_SECRET'));
+    
+            // Get user's credentials
+            $credentials = GoogleCredential::where('user_id', Auth::id())->first();
+            
+            if (!$credentials) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Google authentication required'
+                ], 401);
+            }
+    
+            // Set access token
             $client->setAccessToken([
                 'access_token' => $credentials->access_token,
                 'refresh_token' => $credentials->refresh_token
             ]);
-        } catch (\Exception $tokenSetError) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to set access token',
-                'debug' => $tokenSetError->getMessage()
-            ], 500);
-        }
-
-        // Check and refresh token if expired
-        try {
+    
+            // Refresh the token if it's expired
             if ($client->isAccessTokenExpired()) {
                 $client->fetchAccessTokenWithRefreshToken($credentials->refresh_token);
-                
-                // Update tokens
                 $credentials->update([
                     'access_token' => $client->getAccessToken()['access_token']
                 ]);
             }
-        } catch (\Exception $refreshError) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to refresh token',
-                'debug' => $refreshError->getMessage()
-            ], 401);
-        }
-
-        // Create Google Classroom Service
-        try {
+    
+            // Create Google Classroom Service
             $service = new Google_Service_Classroom($client);
-        } catch (\Exception $serviceError) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to create Google Classroom service',
-                'debug' => $serviceError->getMessage()
-            ], 500);
-        }
-
-        // Delete course from Google Classroom
-        try {
+    
+            // Delete course from Google Classroom
             $service->courses->delete($courseId);
-        } catch (\Exception $deleteError) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to delete classroom from Google',
-                'debug' => $deleteError->getMessage()
-            ], 500);
-        }
-
-        // Delete from local database
-        try {
+    
+            // Delete from local database
             $classroom->delete();
-        } catch (\Exception $dbError) {
+    
+            return response()->json([
+                'success' => true,
+                'message' => 'Classroom deleted successfully'
+            ]);
+    
+        } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to delete classroom from local database',
-                'debug' => $dbError->getMessage()
+                'message' => 'Error deleting classroom: ' . $e->getMessage()
             ], 500);
         }
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Classroom deleted successfully'
-        ]);
-
-    } catch (\Exception $generalError) {
-        return response()->json([
-            'success' => false,
-            'message' => 'An unexpected error occurred',
-            'debug' => $generalError->getMessage()
-        ], 500);
     }
-}
-
+    
 
 }

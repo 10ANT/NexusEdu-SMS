@@ -29,11 +29,11 @@
                     {{ $header }}
                 </div>
             </header>
+         
         @endif
-
         <!-- Page Content -->
         <main>
-            @yield('content')
+          
         </main>
     </div>
 

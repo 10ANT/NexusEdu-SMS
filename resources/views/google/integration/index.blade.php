@@ -1,6 +1,71 @@
 @extends('layouts.master')
 
 @section('content')
+
+<style>
+    /* Label Styling */
+label {
+    display: block;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+/* Input Field Styling */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea,
+select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 0.375rem;
+    font-size: 1rem;
+    color: #333;
+    background-color: #f9f9f9;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+textarea:focus,
+select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    outline: none;
+}
+
+/* Button Styling */
+button {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Form Group */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+</style>
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
         <h4>Google Integration</h4>
@@ -64,9 +129,10 @@ $isGoogleConnected = Auth::user()->googleCredential()->exists();
                                 <p class="mb-1"><strong>Room:</strong> {{ $classroom->room }}</p>
                                 <div class="mt-3 d-flex justify-content-between">
                                     <div>
-                                        <a href="{{ route('classroom.show', $classroom->id) }}" class="btn btn-sm btn-primary">
+                                        <a href="https://classroom.googleapis.com/v1/courses/{{$classroom->id}}" class="btn btn-sm btn-primary">
                                             <i class="fas fa-eye me-1"></i>Details
                                         </a>
+                                        
                                         <a href="{{ $classroom->course_link }}" target="_blank" class="btn btn-sm btn-secondary">
                                             <i class="fas fa-external-link-alt me-1"></i>Open
                                         </a>
@@ -155,59 +221,79 @@ $(document).ready(function() {
     
 });
 </script>
-
 <script>
-  $(document).ready(function() {
-    $('.delete-classroom').on('click', function() {
-        const courseId = $(this).data('course-id');
-        
-        Swal.fire({
-            title: 'Are you sure?',
-            text: 'You want to delete this classroom?',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: `/classroom/delete/${courseId}`,
-                    type: 'GET',
-                    success: function(response) {
-                        if (response.success) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Deleted!',
-                                text: 'Classroom has been deleted.'
-                            }).then(() => {
-                                location.reload();
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Oops...',
-                                text: response.message
-                            });
-                            
-                            // Log debug information to console
-                            console.error('Debug Info:', response.debug);
+document.addEventListener('DOMContentLoaded', function() {
+    // Function to get access token
+    async function getAccessToken() {
+        try {
+            const response = await axios.get('/api/get-access-token');
+            if (response.data.success) {
+                return response.data.access_token;
+            } else {
+                throw new Error(response.data.message);
+            }
+        } catch (error) {
+            console.error('Error fetching access token:', error);
+            return null;
+        }
+    }
+
+    // Delete Classroom functionality
+    document.querySelectorAll('.delete-classroom').forEach(button => {
+        button.addEventListener('click', async function() {
+            const courseId = this.dataset.courseId;
+            const accessToken = await getAccessToken();
+
+            if (!accessToken) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Failed to retrieve access token'
+                });
+                return;
+            }
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You want to delete this classroom?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    axios.delete(`https://classroom.googleapis.com/v1/courses/${courseId}`, {
+                        headers: {
+                            'Authorization': `Bearer ${accessToken}`
                         }
-                    },
-                    error: function(xhr) {
+                    })
+                    .then(response => {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Deleted!',
+                            text: 'Classroom has been deleted.'
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    })
+                    .catch(error => {
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
-                            text: xhr.responseJSON ? xhr.responseJSON.message : 'Something went wrong'
+                            text: error.response?.data?.message || 'Something went wrong'
                         });
-                        
-                        // Log error to console
-                        console.error('Error Response:', xhr.responseJSON);
-                    }
-                });
-            }
+                        console.error('Error:', error);
+                    });
+                }
+            });
         });
     });
 });
-</script>
+
+
+    </script>
+
+
+
 @endpush

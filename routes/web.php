@@ -17,12 +17,14 @@ Route::get('/terms-of-use', 'HomeController@terms_of_use')->name('terms_of_use')
 Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/', [EventController::class, 'index'])->name('calendar');
+    Route::get('/dashboard', [EventController::class, 'index'])->name('dashboard');
+
 
      //below is the old index route
     //Route::get('/', 'HomeController@dashboard')->name('home');
 
     Route::get('/home', 'HomeController@dashboard')->name('home');
-    Route::get('/dashboard', 'HomeController@dashboard')->name('dashboard');
+    //Route::get('/dashboard', 'HomeController@dashboard')->name('dashboard');
 
     Route::group(['prefix' => 'my_account'], function() {
         Route::get('/', 'MyAccountController@edit_profile')->name('my_account');
@@ -148,6 +150,15 @@ Route::group(['middleware' => 'auth'], function () {
         });
 
         Route::resource('students', 'StudentRecordController');
+
+        Route::get('/get-sections/{class_id}', function($class_id) {
+            $sections = App\Models\Section::where('my_class_id', $class_id)->get();
+            $html = '<option value="">Select Section</option>';
+            foreach($sections as $section) {
+                $html .= '<option value="'.$section->id.'">'.$section->name.'</option>';
+            }
+            return $html;
+        });
         Route::resource('users', 'UserController');
         Route::resource('classes', 'MyClassController');
         Route::resource('sections', 'SectionController');
@@ -212,9 +223,9 @@ Route::middleware(['auth', 'check.google.auth'])->group(function () {
             Route::get('/classroom/{id}', [GoogleClassroomController::class, 'show'])
             ->name('classroom.show');
     
-            Route::get('/classroom/delete/{courseId}', [GoogleClassroomController::class, 'destroy'])
-            ->name('classroom.delete');
-    });
+           
+            Route::delete('/classroom/{courseId}', [GoogleClassroomController::class, 'destroy'])
+            ->name('classroom.delete');    });
 
     // Google Drive Folder Routes
     Route::prefix('drive-folder')->group(function () {
@@ -228,6 +239,9 @@ Route::middleware(['auth', 'check.google.auth'])->group(function () {
             ->name('drive-folders.destroy');
             
     });
+
+    Route::get('/api/get-access-token', [GoogleAuthController::class, 'getAccessToken']);
+
 
     // AJAX Routes for Integration
     Route::prefix('api')->group(function () {
@@ -256,3 +270,4 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('/events/{id}', [EventController::class, 'update'])->name('events.update');
     Route::delete('/events/{id}', [EventController::class, 'destroy'])->name('events.destroy');
 });
+

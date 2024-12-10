@@ -29,7 +29,7 @@ class StudentRecordsTableSeeder extends Seeder
           User::factory()
                 ->has(
                     StudentRecord::factory()
-                    ->state([
+                    ->parish([
                     'section_id' => $section->id,
                     'my_class_id' => $section->my_class_id,
                     'user_id' => function(User $user){
