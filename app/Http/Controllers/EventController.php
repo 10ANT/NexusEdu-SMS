@@ -40,10 +40,8 @@ class EventController extends Controller
 
     public function store(Request $request)
     {
-        if (!in_array(auth()->user()->user_type, ['super_admin', 'admin'])) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
-
+        $this->authorize('create', Event::class);
+    
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
             'start' => 'required|date',
@@ -51,7 +49,20 @@ class EventController extends Controller
             'description' => 'nullable|string',
             'color' => 'nullable|string',
         ]);
-
+    
+        // Check if a similar event already exists
+        $existingEvent = Event::where('title', $validatedData['title'])
+            ->where('start', $validatedData['start'])
+            ->where('end', $validatedData['end'])
+            ->first();
+    
+        if ($existingEvent) {
+            return response()->json([
+                'message' => 'Event Created',
+                'event' => $existingEvent
+            ], 409);
+        }
+    
         $event = Event::create([
             'title' => $validatedData['title'],
             'start' => $validatedData['start'],
@@ -60,7 +71,7 @@ class EventController extends Controller
             'color' => $validatedData['color'] ?? '#3788d8',
             'user_id' => auth()->id(),
         ]);
-
+    
         return response()->json($event);
     }
 

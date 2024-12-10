@@ -149,9 +149,8 @@
                     </a>
                 </li>
 
-                {{--Academics--}}
-                @if(Qs::userIsAcademic())
 
+                @if(Qs::userIsTeamSAT())
                 <li class="nav-item nav-item-submenu {{ in_array(Route::currentRouteName(), ['drive-folders.index','']) ? 'nav-item-expanded nav-item-open' : '' }} ">
                     <a href="" class="nav-link"><i class="icon-graduation2"></i> <span> Google Classroom</span></a>
 
@@ -160,6 +159,13 @@
                         <li class="nav-item"><a href="{{ route('classroom.index') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['classroom.index']) ? 'active' : '' }}">Classroom Management</a></li>
                     </ul>
                 </li>
+                @endif
+
+
+                {{--Academics--}}
+                @if(Qs::userIsAcademic())
+
+                
 
                     <li class="nav-item nav-item-submenu {{ in_array(Route::currentRouteName(), ['tt.index', 'ttr.edit', 'ttr.show', 'ttr.manage']) ? 'nav-item-expanded nav-item-open' : '' }} ">
                         <a href="#" class="nav-link"><i class="icon-graduation2"></i> <span> Academics</span></a>
@@ -178,8 +184,10 @@
                             {{--Links--}}
                             <li class="nav-item"><p href="" class="nav-link" id="nexusChatBtn">AI Study Chatbot</p></li>
                             <li class="nav-item "><a href="https://pomofocus.io/" class="nav-link">Pomodoro Time Management</a></li>
+                            
+                            @if(Qs::userIsTeamSAT())
                             <li class="nav-item"><a href="{{route("upload.papers")}}" class="nav-link {{ in_array(Route::currentRouteName(), ['upload.papers']) ? 'active' : '' }}">AI Test Paper Marker</a></li>
-
+                            @endif
                             </ul>
 
                     </li>
@@ -211,7 +219,7 @@
                     </li>
                 @endif
                 {{--Chat--}}
-                      @if(Qs::userIsAdministrative())
+                      @if(Qs::userIsAcademic())
                       <li class="nav-link">
                           <a href="http://127.0.0.1:8000/chatify" class="nav-link">
                               <i class="icon-bubbles4"></i>
@@ -219,6 +227,9 @@
                           </a>
                       </li>
                       @endif
+
+
+        
 
                 {{--Manage Students--}}
                 @if(Qs::userIsTeamSAT())

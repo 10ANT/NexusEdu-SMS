@@ -18,12 +18,13 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/', [EventController::class, 'index'])->name('calendar');
     Route::get('/dashboard', [EventController::class, 'index'])->name('dashboard');
+    Route::get('/home', [EventController::class, 'index'])->name('home');
 
 
      //below is the old index route
     //Route::get('/', 'HomeController@dashboard')->name('home');
 
-    Route::get('/home', 'HomeController@dashboard')->name('home');
+    //Route::get('/home', 'HomeController@dashboard')->name('home');
     //Route::get('/dashboard', 'HomeController@dashboard')->name('dashboard');
 
     Route::group(['prefix' => 'my_account'], function() {
